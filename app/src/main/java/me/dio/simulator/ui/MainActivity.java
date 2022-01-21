@@ -2,20 +2,19 @@ package me.dio.simulator.ui;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.icu.text.UnicodeSetIterator;
 import android.os.Bundle;
-import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+
 
 import me.dio.simulator.R;
 import me.dio.simulator.data.MatchesApi;
@@ -28,13 +27,11 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-
 public class MainActivity extends AppCompatActivity {
-
 
     private ActivityMainBinding binding;
     private MatchesApi matchesApi;
-    private MatchesAdapter matchesAdapter;
+    private MatchesAdapter matchesAdapter = new MatchesAdapter(Collections.emptyList());
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
         setupMatchesList();
         setupMatchesRefresh();
         setupFloatingActionButton();
-
     }
 
     private void setupHttpClient() {
@@ -55,19 +51,19 @@ public class MainActivity extends AppCompatActivity {
                 .baseUrl("https://sarahtumenas.github.io/matches-simulator-api/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
+
         matchesApi = retrofit.create(MatchesApi.class);
     }
-
 
     private void setupMatchesList() {
         binding.rvMatches.setHasFixedSize(true);
         binding.rvMatches.setLayoutManager(new LinearLayoutManager(this));
+        binding.rvMatches.setAdapter(matchesAdapter);
         findMatchesFromApi();
     }
 
-
     private void setupMatchesRefresh() {
-        binding.srlMatches.setOnRefreshListener(this:: findMatchesFromApi);
+        binding.srlMatches.setOnRefreshListener(this::findMatchesFromApi);
     }
 
     private void setupFloatingActionButton() {
@@ -87,13 +83,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void findMatchesFromApi(){
+    private void findMatchesFromApi() {
         binding.srlMatches.setRefreshing(true);
         matchesApi.getMatches().enqueue(new Callback<List<Match>>() {
             @Override
-            public void onResponse(Call<List<Match>> call, Response<List<Match>> response) {
-                if (response.isSuccessful()){
-                    List <Match> matches = response.body();
+            public void onResponse(@NonNull Call<List<Match>> call, @NonNull Response<List<Match>> response) {
+                if (response.isSuccessful()) {
+                    List<Match> matches = response.body();
                     matchesAdapter = new MatchesAdapter(matches);
                     binding.rvMatches.setAdapter(matchesAdapter);
                 } else {
@@ -103,16 +99,14 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Match>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<Match>> call, @NonNull Throwable t) {
                 showErrorMessage();
                 binding.srlMatches.setRefreshing(false);
             }
         });
-
     }
+
     private void showErrorMessage() {
-        Snackbar.make(binding.fabSimulate,
-                R.string.error_api,
-                Snackbar.LENGTH_LONG).show();
+        Snackbar.make(binding.fabSimulate, R.string.error_api, Snackbar.LENGTH_LONG).show();
     }
 }

@@ -54,9 +54,9 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
 
     // Firebase Dependencies: https://firebase.google.com/docs/android/setup?hl=pt-br
-    implementation platform('com.google.firebase:firebase-bom:29.0.3')
+    implementation platform('com.google.firebase:firebase-bom:29.0.4')
     implementation 'com.google.firebase:firebase-analytics-ktx:20.0.2'
-    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.2.6'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.2.7'
 
     testImplementation 'junit:junit:4.13.2'
 
