@@ -10,3 +10,6 @@ App Android Nativo de Simulação de Partidas. Este repositório foi organizado 
 
 3. Java e kotlin Juntos!? Construindo Apps Android
     - [release/java-e-kotlin-juntos-construindo-apps-android](https://github.com/SarahTumenas/matches-simulator-app/tree/release/java-e-kotlin-juntos-construindo-apps-android)
+
+4. Explorando o Firebase para Apps Android
+    - [release/explorando-o-firebase-para-apps-android-resilientes](https://github.com/SarahTumenas/matches-simulator-app/tree/release/explorando-o-firebase-para-apps-android-resilientes)
